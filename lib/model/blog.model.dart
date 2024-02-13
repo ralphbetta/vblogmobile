@@ -4,6 +4,7 @@ class BlogPost {
     String? title;
     String? subTitle;
     String? body;
+    String? image;
     DateTime? dateCreated;
 
     BlogPost({
@@ -12,6 +13,7 @@ class BlogPost {
         this.title,
         this.subTitle,
         this.body,
+        this.image,
         this.dateCreated,
     });
 
@@ -21,6 +23,7 @@ class BlogPost {
         title: json["title"],
         subTitle: json["subTitle"],
         body: json["body"],
+        image: json['image'],
         dateCreated: json["dateCreated"] == null ? null : DateTime.parse(json["dateCreated"]),
     );
 
@@ -30,6 +33,7 @@ class BlogPost {
         "title": title,
         "subTitle": subTitle,
         "body": body,
+        "image": image,
         "dateCreated": dateCreated?.toIso8601String(),
     };
 }

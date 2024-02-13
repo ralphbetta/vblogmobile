@@ -44,6 +44,7 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    
     AppSize().init(context);
     bool isLoading = ref.watch(loadingProvider);
     int catIndex = ref.watch(numberProvider);
@@ -229,6 +230,10 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
                             ],
                           ),
                         ),
+
+                   /*---------------------------------------
+                   SECTION ONE BLOGS
+                  --------------------------------------------*/
                         SizedBox(
                           height: AppSize.height(32),
                           child: ListView.builder(
@@ -402,7 +407,7 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
                                             left: Radius.circular(10)
                                           ),
                                            color: Theme.of(context).shadowColor,
-                                          image: DecorationImage(image: NetworkImage(bannerUrl), fit: BoxFit.cover),
+                                          image: DecorationImage(image: NetworkImage(blogs.reversed.toList()[index].image!), fit: BoxFit.cover),
                                         ),
                                         margin: const EdgeInsets.only(right: 5),
                                       ),
@@ -488,6 +493,9 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
                 ],
               ),
             ),
+            floatingActionButton: FloatingActionButton(onPressed: (){
+              context.push(AppRoutes.formscreen, extra: "");
+            }, backgroundColor: Theme.of(context).primaryColor, child: const Icon(Icons.wrap_text),),
     );
   }
 }

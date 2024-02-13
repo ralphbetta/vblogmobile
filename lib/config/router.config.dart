@@ -1,6 +1,7 @@
 import 'package:go_router/go_router.dart';
 import 'package:vblogmobile/constant/route.path.dart';
 import 'package:vblogmobile/screens/detail.screen.dart';
+import 'package:vblogmobile/screens/form.screen.dart';
 import 'package:vblogmobile/screens/home.screen.dart';
 
 
@@ -16,6 +17,10 @@ GoRouter router() {
 
         GoRoute(path: AppRoutes.postDetails,  builder: (context, state){
         return PostDetails(postId: state.extra as String,);
+      }),
+
+        GoRoute(path: AppRoutes.formscreen,  builder: (context, state){
+        return FormScreen(postId: state.extra as String,);
       })
     ]
   );

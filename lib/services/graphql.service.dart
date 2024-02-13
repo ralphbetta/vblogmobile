@@ -1,5 +1,6 @@
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:vblogmobile/config/graphql.config.dart';
+import 'package:vblogmobile/constant/constant.dart';
 import 'package:vblogmobile/model/blog.model.dart';
 
 const String queryx = """
@@ -34,13 +35,15 @@ class GraphQLService {
 
       List? res = result.data?['allBlogPosts'];
 
-      print("this is response $res");
-
       if (res == null || res.isEmpty) {
         return [];
       } else {
         List<BlogPost> books = [
-          ...List.generate(res.length, (index) => BlogPost.fromJson(res[index]))
+          ...List.generate(res.length, (index) { 
+            BlogPost data = BlogPost.fromJson(res[index]);
+            data.image = bannerUrl;
+            return data;
+            })
         ];
 
         return books;

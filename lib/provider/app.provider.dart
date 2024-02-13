@@ -9,10 +9,13 @@ final numberProvider = StateProvider<int>((ref) {
   return 0;
 });
 
+final postProvider = StateProvider<BlogPost?>((ref) {
+  return null;
+});
+
 final loadingProvider = StateProvider<bool>((ref) {
   return true;
 });
-
 
 class BlogNotifier extends StateNotifier<List<BlogPost>> {
   BlogNotifier() : super([]);
@@ -21,8 +24,7 @@ class BlogNotifier extends StateNotifier<List<BlogPost>> {
     state = [...state, personModel];
   }
 
-  void init(List<BlogPost> data){
+  void init(List<BlogPost> data) {
     state = data;
   }
-
 }
