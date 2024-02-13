@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:vblogmobile/config/size.config.dart';
@@ -58,30 +59,40 @@ class _PostDetailsState extends ConsumerState<PostDetails>
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(_blogPost.title ?? "",
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 22)),
-                          Container(
-                            height: AppSize.height(20),
-                            width: double.infinity,
-                            margin: const EdgeInsets.symmetric(vertical: 10),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                image: DecorationImage(
-                                    image: NetworkImage(bannerUrl),
-                                    fit: BoxFit.fill)),
+                          FadeInRight(
+                            child: Text(_blogPost.title ?? "",
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 22)),
                           ),
-                          Text(
-                            _blogPost.subTitle ?? "",
-                            style: Theme.of(context)
-                                .textTheme
-                                .headlineMedium!
-                                .copyWith(fontSize: 18),
+                          ZoomIn(
+                            child: Container(
+                              height: AppSize.height(20),
+                              width: double.infinity,
+                              margin: const EdgeInsets.symmetric(vertical: 10),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  image: DecorationImage(
+                                      image: NetworkImage(bannerUrl),
+                                      fit: BoxFit.fill)),
+                            ),
+                          ),
+                          FadeInUp(
+                            child: Text(
+                              _blogPost.subTitle ?? "",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headlineMedium!
+                                  .copyWith(fontSize: 18),
+                            ),
                           ),
                           SizedBox(height: 10),
-                          Text(
-                            _blogPost.body ?? "",
-                            style: Theme.of(context).textTheme.bodyMedium,
+                          SlideInUp(
+                               delay: Duration(milliseconds: 1 * 400),
+
+                            child: Text(
+                              _blogPost.body ?? "",
+                              style: Theme.of(context).textTheme.bodyMedium,
+                            ),
                           )
                         ],
                       ),
@@ -105,25 +116,27 @@ class _PostDetailsState extends ConsumerState<PostDetails>
                                   onTap: (){
                                     context.push(AppRoutes.editscreen, extra: _blogPost);
                                   },
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 15, vertical: 15),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(50),
-                                      color: Theme.of(context).primaryColor,
-                                    ),
-                                    child: Row(
-                                      children: const [
-                                        Icon(
-                                          Icons.edit,
-                                          color: Colors.white,
-                                        ),
-                                        SizedBox(width: 15),
-                                        Text(
-                                          "Edit Post",
-                                          style: TextStyle(color: Colors.white),
-                                        )
-                                      ],
+                                  child: FadeInLeft(
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 15, vertical: 15),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(50),
+                                        color: Theme.of(context).primaryColor,
+                                      ),
+                                      child: Row(
+                                        children: const [
+                                          Icon(
+                                            Icons.edit,
+                                            color: Colors.white,
+                                          ),
+                                          SizedBox(width: 15),
+                                          Text(
+                                            "Edit Post",
+                                            style: TextStyle(color: Colors.white),
+                                          )
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -147,24 +160,26 @@ class _PostDetailsState extends ConsumerState<PostDetails>
                                      }
                                     }
                                   },
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 15, vertical: 15),
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(50),
-                                        color: Colors.red),
-                                    child: Row(
-                                      children:  [
-                                        const Icon(
-                                          Icons.delete_forever,
-                                          color: Colors.white,
-                                        ),
-                                       const SizedBox(width: 15),
-                                        Text(
-                                          loading ? "Deleting": "Delete Post",
-                                          style: const TextStyle(color: Colors.white),
-                                        )
-                                      ],
+                                  child: FadeInRight(
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 15, vertical: 15),
+                                      decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(50),
+                                          color: Colors.red),
+                                      child: Row(
+                                        children:  [
+                                          const Icon(
+                                            Icons.delete_forever,
+                                            color: Colors.white,
+                                          ),
+                                         const SizedBox(width: 15),
+                                          Text(
+                                            loading ? "Deleting": "Delete Post",
+                                            style: const TextStyle(color: Colors.white),
+                                          )
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),

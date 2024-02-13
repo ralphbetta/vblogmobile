@@ -13,16 +13,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<ThemeMode>(
-      valueListenable: ThemeClass.themeNotifier,
-      builder: (_, ThemeMode currentMode, __) {
-        return MaterialApp.router(
+        valueListenable: ThemeClass.themeNotifier,
+        builder: (_, ThemeMode currentMode, __) {
+          return MaterialApp.router(
+            debugShowCheckedModeBanner: false,
             title: 'VBlog App',
             themeMode: currentMode,
             theme: ThemeClass.lightTheme,
             darkTheme: ThemeClass.darkTheme,
             routerConfig: router(),
-        );
-      }
-    );
+          );
+        });
   }
 }

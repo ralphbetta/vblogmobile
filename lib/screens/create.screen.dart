@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vblogmobile/config/size.config.dart';
@@ -21,13 +22,9 @@ class FormScreen extends ConsumerWidget {
 
     BlogPost? blog = ref.watch(postProvider);
 
-    // void load() async {
-    //     BlogPost? data = await graphQLService.singleBlog(blogId: postId);
-    //     ref.read(postProvider.notifier).state = data;
-    // }
+        bool loading = ref.watch(loadingProvider);
 
-    // load();
-    
+
     return Scaffold(
         appBar: AppBar(
           title: Text(
@@ -45,51 +42,60 @@ class FormScreen extends ConsumerWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Container(
-                          width: double.infinity,
-                          padding: const EdgeInsets.all(10),
-                          margin: const EdgeInsets.symmetric(vertical: 10),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: Theme.of(context).highlightColor),
-                          child: TextFormField(
-                            controller: _titleController,
-                            keyboardType: TextInputType.name,
-                            decoration: const InputDecoration(
-                                hintText: "Enter post title",
-                                border: InputBorder.none),
+                        FadeInUp(
+                          delay: Duration(milliseconds: 100),
+                          child: Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.all(10),
+                            margin: const EdgeInsets.symmetric(vertical: 10),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Theme.of(context).highlightColor),
+                            child: TextFormField(
+                              controller: _titleController,
+                              keyboardType: TextInputType.name,
+                              decoration: const InputDecoration(
+                                  hintText: "Enter post title",
+                                  border: InputBorder.none),
+                            ),
                           ),
                         ),
-                        Container(
-                          width: double.infinity,
-                          padding: const EdgeInsets.all(10),
-                          margin: const EdgeInsets.symmetric(vertical: 10),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: Theme.of(context).highlightColor),
-                          child: TextFormField(
-                            controller: _subTitleController,
-                            keyboardType: TextInputType.name,
-                            decoration: const InputDecoration(
-                                hintText: "Enter post subtitle",
-                                border: InputBorder.none),
+                        FadeInUp(
+                          delay: Duration(milliseconds: 1 * 200),
+                          child: Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.all(10),
+                            margin: const EdgeInsets.symmetric(vertical: 10),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Theme.of(context).highlightColor),
+                            child: TextFormField(
+                              controller: _subTitleController,
+                              keyboardType: TextInputType.name,
+                              decoration: const InputDecoration(
+                                  hintText: "Enter post subtitle",
+                                  border: InputBorder.none),
+                            ),
                           ),
                         ),
-                        Container(
-                          height: AppSize.height(20),
-                          width: double.infinity,
-                          padding: const EdgeInsets.all(10),
-                          margin: const EdgeInsets.symmetric(vertical: 10),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: Theme.of(context).highlightColor),
-                          child: TextFormField(
-                            controller: _bodyController,
-                            keyboardType: TextInputType.multiline,
-                            maxLines: 9,
-                            decoration: const InputDecoration(
-                                hintText: "Enter post body",
-                                border: InputBorder.none),
+                        FadeInUp(
+                          delay: Duration(milliseconds: 1 * 400),
+                          child: Container(
+                            height: AppSize.height(20),
+                            width: double.infinity,
+                            padding: const EdgeInsets.all(10),
+                            margin: const EdgeInsets.symmetric(vertical: 10),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Theme.of(context).highlightColor),
+                            child: TextFormField(
+                              controller: _bodyController,
+                              keyboardType: TextInputType.multiline,
+                              maxLines: 9,
+                              decoration: const InputDecoration(
+                                  hintText: "Enter post body",
+                                  border: InputBorder.none),
+                            ),
                           ),
                         ),
                       ],
@@ -111,6 +117,7 @@ class FormScreen extends ConsumerWidget {
                               Expanded(
                                 child: InkWell(
                                   onTap: () async {
+                                      ref.read(loadingProvider.notifier).state = true;
                                     bool response =
                                         await _graphQLService.createBlogPost(
                                             title: _titleController.text,
@@ -121,6 +128,7 @@ class FormScreen extends ConsumerWidget {
                                       List<BlogPost> books = await _graphQLService.blogPosts();
                                       ref.read(blogProvider.notifier).init(books);
                                       if (response) {
+                                          ref.read(loadingProvider.notifier).state = false;
                                         if(context.mounted){
                                             showToast( context, "Created Sucessfuly");
                                             Navigator.pop(context);
@@ -138,10 +146,10 @@ class FormScreen extends ConsumerWidget {
                                     child: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
-                                      children: const [
+                                      children:  [
                                         SizedBox(width: 15),
                                         Text(
-                                          "Create Post",
+                                          loading ?"Submiting...": "Create Post",
                                           style: TextStyle(color: Colors.white),
                                         )
                                       ],

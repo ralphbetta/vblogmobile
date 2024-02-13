@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:vblogmobile/config/size.config.dart';
 import 'package:vblogmobile/constant/route.path.dart';
 import 'package:vblogmobile/model/blog.model.dart';
@@ -144,7 +145,7 @@ class _PostDetailsState extends ConsumerState<EditPost>
                                     showToast(context, "Updated Sucessfuly");
                                     ref.read(loadingProvider.notifier).state =
                                         false;
-                                    Navigator.popAndPushNamed(context, AppRoutes.home);
+                                    context.pushReplacement(AppRoutes.home);
                                   }
                                 }
                               }
