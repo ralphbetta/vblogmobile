@@ -12,7 +12,7 @@ class FormScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final TextEditingController _titleController = TextEditingController();
+      final TextEditingController _titleController = TextEditingController();
     final TextEditingController _subTitleController = TextEditingController();
     final TextEditingController _bodyController = TextEditingController();
     final TextEditingController _idController = TextEditingController();
@@ -27,7 +27,7 @@ class FormScreen extends ConsumerWidget {
     // }
 
     // load();
-
+    
     return Scaffold(
         appBar: AppBar(
           title: Text(
@@ -36,9 +36,7 @@ class FormScreen extends ConsumerWidget {
                 TextStyle(color: Theme.of(context).textTheme.bodyLarge!.color!),
           ),
         ),
-        body: blog == null
-            ? const Center(child: Text("Loading..."))
-            : Column(
+        body: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(

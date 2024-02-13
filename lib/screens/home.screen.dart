@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -178,32 +179,35 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
                             onTap: () {
                               ref.read(numberProvider.notifier).state = index;
                             },
-                            child: Container(
-                                decoration: BoxDecoration(
-                                    color: catIndex != index
-                                        ? Theme.of(context)
-                                            .highlightColor
-                                            .withOpacity(0.2)
-                                        : Theme.of(context)
-                                            .textTheme
-                                            .bodyLarge!
-                                            .color!,
-                                    borderRadius: BorderRadius.circular(20)),
-                                margin: const EdgeInsets.only(right: 8),
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 15, vertical: 8),
-                                child: Center(
-                                    child: Text(
-                                  categories[index],
-                                  style: TextStyle(
+                            child: SlideInUp(
+                              delay: Duration(milliseconds: index * 100),
+                              child: Container(
+                                  decoration: BoxDecoration(
                                       color: catIndex != index
                                           ? Theme.of(context)
+                                              .highlightColor
+                                              .withOpacity(0.2)
+                                          : Theme.of(context)
                                               .textTheme
                                               .bodyLarge!
-                                              .color!
-                                          : Theme.of(context)
-                                              .scaffoldBackgroundColor),
-                                ))),
+                                              .color!,
+                                      borderRadius: BorderRadius.circular(20)),
+                                  margin: const EdgeInsets.only(right: 8),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 15, vertical: 8),
+                                  child: Center(
+                                      child: Text(
+                                    categories[index],
+                                    style: TextStyle(
+                                        color: catIndex != index
+                                            ? Theme.of(context)
+                                                .textTheme
+                                                .bodyLarge!
+                                                .color!
+                                            : Theme.of(context)
+                                                .scaffoldBackgroundColor),
+                                  ))),
+                            ),
                           );
                         }),
                   ),
@@ -211,6 +215,159 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
                       child: SingleChildScrollView(
                     child: Column(
                       children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 30),
+                          child: BounceInLeft(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Text(
+                                  "Trending",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold, fontSize: 16),
+                                ),
+                                Text(
+                                  "View More",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Theme.of(context).primaryColor),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+
+                   /*---------------------------------------
+                   SECTION ONE BLOGS
+                  --------------------------------------------*/
+                        SizedBox(
+                          height: AppSize.height(32),
+                          child: ListView.builder(
+                              itemCount: blogs.length,
+                              scrollDirection: Axis.horizontal,
+                              itemBuilder: (context, index) {
+                                return GestureDetector(
+                                  onTap: (){
+                                    context.push(AppRoutes.postDetails, extra: blogs[index].id);
+                                  },
+                                  child: SlideInUp(
+                                    delay: Duration(milliseconds: index * 400),
+                                    child: Container(
+                                        width: AppSize.width(60),
+                                        decoration: BoxDecoration(
+                                            color: Theme.of(context)
+                                                .scaffoldBackgroundColor,
+                                            boxShadow: [
+                                              BoxShadow(
+                                                  color: Theme.of(context)
+                                                      .shadowColor
+                                                      .withOpacity(0.2),
+                                                  spreadRadius: 1,
+                                                  blurRadius: 20)
+                                            ],
+                                            borderRadius:
+                                                BorderRadius.circular(20)),
+                                        margin: const EdgeInsets.only(
+                                            right: 25, left: 4, top: 4, bottom: 6),
+                                        // padding: const EdgeInsets.symmetric(
+                                        //     horizontal: 15, vertical: 8),
+                                        child: Column(
+                                          children: [
+                                            Container(
+                                              width: double.infinity,
+                                              height: AppSize.height(18),
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(20),
+                                                  image: DecorationImage(
+                                                      image:
+                                                          NetworkImage(bannerUrl),
+                                                      fit: BoxFit.cover)),
+                                            ),
+                                            Padding(
+                                              padding: const EdgeInsets.all(8.0),
+                                              child: Column(
+                                                children: [
+                                                  Container(
+                                                    height: AppSize.height(7.5),
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment.start,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment.start,
+                                                      children: [
+                                                        SizedBox(
+                                                          width: AppSize.width(50),
+                                                          child: Text(
+                                                            blogs[index].title!,
+                                                            style: const TextStyle(
+                                                              fontSize: 20,
+                                                              fontWeight:
+                                                                  FontWeight.w500,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  const SizedBox(height: 10),
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      const Text(
+                                                        "All",
+                                                        style: TextStyle(
+                                                          fontSize: 14,
+                                                          fontWeight:
+                                                              FontWeight.w300,
+                                                        ),
+                                                      ),
+                                                      Row(
+                                                        children: [
+                                                          const Icon(
+                                                            Icons.calendar_today,
+                                                            size: 15,
+                                                          ),
+                                                          const SizedBox(width: 5),
+                                                          Text(
+                                                            DateFormat("MMM dd")
+                                                                .format(blogs[index]
+                                                                    .dateCreated!),
+                                                            style: const TextStyle(
+                                                              fontSize: 14,
+                                                              fontWeight:
+                                                                  FontWeight.w300,
+                                                            ),
+                                                          ),
+                                                          const SizedBox(width: 5),
+                                                          const Icon(
+                                                            Icons.visibility,
+                                                            size: 15,
+                                                          ),
+                                                          const SizedBox(width: 5),
+                                                          const Text(
+                                                            "22K",
+                                                            style: TextStyle(
+                                                              fontSize: 14,
+                                                              fontWeight:
+                                                                  FontWeight.w300,
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                            )
+                                          ],
+                                        )),
+                                  ),
+                                );
+                              }),
+                        ),
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 30),
                           child: Row(
@@ -230,55 +387,51 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
                             ],
                           ),
                         ),
+                        ...List.generate(
+                            blogs.length,
+                            (index) => InkWell(
+                              onTap: (){
+                                context.push(AppRoutes.postDetails, extra: blogs.reversed.toList()[index].id);
 
-                   /*---------------------------------------
-                   SECTION ONE BLOGS
-                  --------------------------------------------*/
-                        SizedBox(
-                          height: AppSize.height(32),
-                          child: ListView.builder(
-                              itemCount: blogs.length,
-                              scrollDirection: Axis.horizontal,
-                              itemBuilder: (context, index) {
-                                return GestureDetector(
-                                  onTap: (){
-                                    context.push(AppRoutes.postDetails, extra: blogs[index].id);
-                                  },
-                                  child: Container(
-                                      width: AppSize.width(60),
-                                      decoration: BoxDecoration(
-                                          color: Theme.of(context)
-                                              .scaffoldBackgroundColor,
-                                          boxShadow: [
-                                            BoxShadow(
-                                                color: Theme.of(context)
-                                                    .shadowColor
-                                                    .withOpacity(0.2),
-                                                spreadRadius: 1,
-                                                blurRadius: 20)
-                                          ],
-                                          borderRadius:
-                                              BorderRadius.circular(20)),
+                              },
+                              child: SlideInLeft(
+                                  delay: Duration(milliseconds: index * 400),
+                                child: Container(
                                       margin: const EdgeInsets.only(
-                                          right: 25, left: 4, top: 4, bottom: 6),
-                                      // padding: const EdgeInsets.symmetric(
-                                      //     horizontal: 15, vertical: 8),
-                                      child: Column(
+                                          top: 10, right: 5, left: 5),
+                                      width: double.infinity,
+                                      height: AppSize.height(12),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        color: Theme.of(context).scaffoldBackgroundColor,
+                                                        
+                                        boxShadow: [
+                                          BoxShadow(
+                                              color: Theme.of(context)
+                                                  .shadowColor
+                                                  .withOpacity(0.1),
+                                              spreadRadius: 1,
+                                              blurRadius: 20)
+                                        ],
+                                      ),
+                                      child: Row(
                                         children: [
                                           Container(
-                                            width: double.infinity,
-                                            height: AppSize.height(18),
+                                            width: AppSize.width(28),
                                             decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(20),
-                                                image: DecorationImage(
-                                                    image:
-                                                        NetworkImage(bannerUrl),
-                                                    fit: BoxFit.cover)),
+                                              borderRadius: const BorderRadius.horizontal(
+                                                left: Radius.circular(10)
+                                              ),
+                                               color: Theme.of(context).shadowColor,
+                                              image: DecorationImage(image: NetworkImage(blogs.reversed.toList()[index].image!), fit: BoxFit.cover),
+                                            ),
+                                            margin: const EdgeInsets.only(right: 5),
                                           ),
                                           Padding(
                                             padding: const EdgeInsets.all(8.0),
                                             child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
                                               children: [
                                                 Container(
                                                   height: AppSize.height(7.5),
@@ -291,9 +444,9 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
                                                       SizedBox(
                                                         width: AppSize.width(50),
                                                         child: Text(
-                                                          blogs[index].title!,
+                                                          blogs.reversed.toList()[index].title!,
                                                           style: const TextStyle(
-                                                            fontSize: 20,
+                                                            fontSize: 16,
                                                             fontWeight:
                                                                 FontWeight.w500,
                                                           ),
@@ -302,20 +455,13 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
                                                     ],
                                                   ),
                                                 ),
-                                                const SizedBox(height: 10),
+                                                // const SizedBox(height: 10),
                                                 Row(
                                                   mainAxisAlignment:
                                                       MainAxisAlignment
                                                           .spaceBetween,
                                                   children: [
-                                                    const Text(
-                                                      "All",
-                                                      style: TextStyle(
-                                                        fontSize: 14,
-                                                        fontWeight:
-                                                            FontWeight.w300,
-                                                      ),
-                                                    ),
+                                                   
                                                     Row(
                                                       children: [
                                                         const Icon(
@@ -355,138 +501,10 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
                                             ),
                                           )
                                         ],
-                                      )),
-                                );
-                              }),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 30),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const Text(
-                                "Trending",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 16),
-                              ),
-                              Text(
-                                "View More",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Theme.of(context).primaryColor),
-                              )
-                            ],
-                          ),
-                        ),
-                        ...List.generate(
-                            blogs.length,
-                            (index) => Container(
-                                  margin: const EdgeInsets.only(
-                                      top: 10, right: 5, left: 5),
-                                  width: double.infinity,
-                                  height: AppSize.height(12),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: Theme.of(context).scaffoldBackgroundColor,
-                          
-                                    boxShadow: [
-                                      BoxShadow(
-                                          color: Theme.of(context)
-                                              .shadowColor
-                                              .withOpacity(0.1),
-                                          spreadRadius: 1,
-                                          blurRadius: 20)
-                                    ],
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      Container(
-                                        width: AppSize.width(28),
-                                        decoration: BoxDecoration(
-                                          borderRadius: const BorderRadius.horizontal(
-                                            left: Radius.circular(10)
-                                          ),
-                                           color: Theme.of(context).shadowColor,
-                                          image: DecorationImage(image: NetworkImage(blogs.reversed.toList()[index].image!), fit: BoxFit.cover),
-                                        ),
-                                        margin: const EdgeInsets.only(right: 5),
                                       ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Container(
-                                              height: AppSize.height(7.5),
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  SizedBox(
-                                                    width: AppSize.width(50),
-                                                    child: Text(
-                                                      blogs.reversed.toList()[index].title!,
-                                                      style: const TextStyle(
-                                                        fontSize: 16,
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            // const SizedBox(height: 10),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                               
-                                                Row(
-                                                  children: [
-                                                    const Icon(
-                                                      Icons.calendar_today,
-                                                      size: 15,
-                                                    ),
-                                                    const SizedBox(width: 5),
-                                                    Text(
-                                                      DateFormat("MMM dd")
-                                                          .format(blogs[index]
-                                                              .dateCreated!),
-                                                      style: const TextStyle(
-                                                        fontSize: 14,
-                                                        fontWeight:
-                                                            FontWeight.w300,
-                                                      ),
-                                                    ),
-                                                    const SizedBox(width: 5),
-                                                    const Icon(
-                                                      Icons.visibility,
-                                                      size: 15,
-                                                    ),
-                                                    const SizedBox(width: 5),
-                                                    const Text(
-                                                      "22K",
-                                                      style: TextStyle(
-                                                        fontSize: 14,
-                                                        fontWeight:
-                                                            FontWeight.w300,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ))
+                                    ),
+                              ),
+                            ))
                       ],
                     ),
                   ))
@@ -494,7 +512,7 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
               ),
             ),
             floatingActionButton: FloatingActionButton(onPressed: (){
-              context.push(AppRoutes.formscreen, extra: "");
+              context.push(AppRoutes.creatscreen, extra: "");
             }, backgroundColor: Theme.of(context).primaryColor, child: const Icon(Icons.wrap_text),),
     );
   }

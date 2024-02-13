@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:vblogmobile/config/size.config.dart';
 import 'package:vblogmobile/constant/constant.dart';
+import 'package:vblogmobile/constant/route.path.dart';
 import 'package:vblogmobile/model/blog.model.dart';
 import 'package:vblogmobile/provider/app.provider.dart';
 import 'package:vblogmobile/services/graphql.service.dart';
@@ -34,6 +35,8 @@ class _PostDetailsState extends ConsumerState<PostDetails>
   @override
   Widget build(BuildContext context) {
     BlogPost? _blogPost = ref.watch(postProvider);
+    bool loading = ref.watch(loadingProvider);
+
 
     return Scaffold(
         appBar: AppBar(
@@ -51,35 +54,37 @@ class _PostDetailsState extends ConsumerState<PostDetails>
                   Expanded(
                       child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 15),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(_blogPost.title ?? "",
-                            style: const TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 22)),
-                        Container(
-                          height: AppSize.height(20),
-                          width: double.infinity,
-                          margin: const EdgeInsets.symmetric(vertical: 10),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              image: DecorationImage(
-                                  image: NetworkImage(bannerUrl),
-                                  fit: BoxFit.fill)),
-                        ),
-                        Text(
-                          _blogPost.subTitle ?? "",
-                          style: Theme.of(context)
-                              .textTheme
-                              .headlineMedium!
-                              .copyWith(fontSize: 18),
-                        ),
-                        SizedBox(height: 10),
-                        Text(
-                          _blogPost.body ?? "",
-                          style: Theme.of(context).textTheme.bodyMedium,
-                        )
-                      ],
+                    child: SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(_blogPost.title ?? "",
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 22)),
+                          Container(
+                            height: AppSize.height(20),
+                            width: double.infinity,
+                            margin: const EdgeInsets.symmetric(vertical: 10),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                image: DecorationImage(
+                                    image: NetworkImage(bannerUrl),
+                                    fit: BoxFit.fill)),
+                          ),
+                          Text(
+                            _blogPost.subTitle ?? "",
+                            style: Theme.of(context)
+                                .textTheme
+                                .headlineMedium!
+                                .copyWith(fontSize: 18),
+                          ),
+                          SizedBox(height: 10),
+                          Text(
+                            _blogPost.body ?? "",
+                            style: Theme.of(context).textTheme.bodyMedium,
+                          )
+                        ],
+                      ),
                     ),
                   )),
                   SizedBox(
@@ -96,25 +101,30 @@ class _PostDetailsState extends ConsumerState<PostDetails>
                           child: Row(
                             children: [
                               Expanded(
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 15, vertical: 15),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(50),
-                                    color: Theme.of(context).primaryColor,
-                                  ),
-                                  child: Row(
-                                    children: const [
-                                      Icon(
-                                        Icons.edit,
-                                        color: Colors.white,
-                                      ),
-                                      SizedBox(width: 15),
-                                      Text(
-                                        "Edit Post",
-                                        style: TextStyle(color: Colors.white),
-                                      )
-                                    ],
+                                child: InkWell(
+                                  onTap: (){
+                                    context.push(AppRoutes.editscreen, extra: _blogPost);
+                                  },
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 15, vertical: 15),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(50),
+                                      color: Theme.of(context).primaryColor,
+                                    ),
+                                    child: Row(
+                                      children: const [
+                                        Icon(
+                                          Icons.edit,
+                                          color: Colors.white,
+                                        ),
+                                        SizedBox(width: 15),
+                                        Text(
+                                          "Edit Post",
+                                          style: TextStyle(color: Colors.white),
+                                        )
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
@@ -122,12 +132,15 @@ class _PostDetailsState extends ConsumerState<PostDetails>
                               Expanded(
                                 child: InkWell(
                                   onTap: () async {
+
+                                    ref.read(loadingProvider.notifier).state = true;
                                     bool response = await _graphQLService
                                         .deleteBlog(blogId: _blogPost.id!);
                                     List<BlogPost> books =
                                         await _graphQLService.blogPosts();
                                     ref.read(blogProvider.notifier).init(books);
                                     if (response) {
+                                    ref.read(loadingProvider.notifier).state = false;
                                      if(mounted){
                                        context.pop();
                                       showToast(context, "Deleted Succesfully");
@@ -141,15 +154,15 @@ class _PostDetailsState extends ConsumerState<PostDetails>
                                         borderRadius: BorderRadius.circular(50),
                                         color: Colors.red),
                                     child: Row(
-                                      children: const [
-                                        Icon(
+                                      children:  [
+                                        const Icon(
                                           Icons.delete_forever,
                                           color: Colors.white,
                                         ),
-                                        SizedBox(width: 15),
+                                       const SizedBox(width: 15),
                                         Text(
-                                          "Delete Post",
-                                          style: TextStyle(color: Colors.white),
+                                          loading ? "Deleting": "Delete Post",
+                                          style: const TextStyle(color: Colors.white),
                                         )
                                       ],
                                     ),
